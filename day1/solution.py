@@ -1,3 +1,5 @@
+### --- START PART 1 --- ###
+
 # Init "lock dial" array
 # Dial is from 0 to 99
 dial_array = list(range(100))
@@ -7,9 +9,6 @@ dial_position = dial_array[50]
 
 # Dial is circular, so moving left from 0 goes to 99 and moving right from 99 goes to 0
 # Python lists handle this naturally with negative indexing and modulo operations
-
-print(dial_array)
-print("Initial dial position:", dial_position)
 
 # The actual password we are trying to find is the number of times the dial is
 # left pointing at 0 after any rotation in the sequence
@@ -60,3 +59,26 @@ for rotation in rotations:
 print(
     "Number of times dial points at 0:", count_dial_at_zero
 )  # Result is 1172 which is correct!
+
+### --- END PART 1 --- ###
+
+### --- START PART 2 --- ###
+# Reset our variables
+dial_position = dial_array[50]
+count_dial_at_zero = 0
+
+
+# In this part, we need to also count the number of times the dial points at 0 AT ANY POINT IN THE ROTATION SEQUENCE
+# THIS MEANS THAT IF IT IS POINTING AT 0 IN THE MIDDLE OF A ROTATION OR AT THE END/RESOLUTION OF A ROTATION, IT COUNTS TOWARDS THE ZERO COUNT
+
+# We can use our existing rotate_dial function, but we need to modify our loop to check each intermediate position
+for rotation in rotations:
+    direction, distance = rotation[0], int(rotation[1:])
+    step = 1 if direction == "R" else -1
+
+    for _ in range(distance):
+        dial_position = dial_array[(dial_position + step) % 100]
+        if dial_position == dial_array[0]:
+            count_dial_at_zero += 1
+
+print("Number of times dial points at 0:", count_dial_at_zero)
