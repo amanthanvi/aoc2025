@@ -47,13 +47,32 @@ def is_invalid_id(id):
     # times as possible, giving back as needed (greedy)
     # \1 matches the same text as most recently matched by the 1st capturing group
     # $ asserts position at the end of a line
-    pattern = r"^(.+)\1$"
+
+    # NEW FROM PART 2
+    # Now an ID is invalid if it is made only of some sequence of digits
+    # repeated at least twice.
+    # So, 12341234 (1234 two times), 123123123 (123 three times), 1212121212
+    # (12 five times), and 1111111 (1 seven times) are all invalid IDs.
+
+    # What's different from part 1 is that we added the + quantifier after \1
+    # From regex101.com:
+    # + matches the previous token between one and unlimited times, as many
+    # times as possible, giving back as needed (greedy)
+
+    # So all together, from regex101.com, the pattern is:
+    # ^ asserts position at start of a line
+    # 1st Capturing Group (.+)
+    # . matches any character (except for line terminators)
+    # + matches the previous token between one and unlimited times, as many times as possible, giving back as needed (greedy)
+    # \1 matches the same text as most recently matched by the 1st capturing group
+    # + matches the previous token between one and unlimited times, as many times as possible, giving back as needed (greedy)
+    # $ asserts position at the end of a line
+    pattern = r"^(.+)\1+$"
+    # OLD FROM PART 1
+    # pattern = r"^(.+)\1$"
 
     # Use re.match to see if the pattern matches the entire ID string
-    if re.match(pattern, id_str):
-        return True
-    else:
-        return False
+    return True if re.match(pattern, id_str) else False
 
 
 for x, y in ranges_tuples:
@@ -71,5 +90,8 @@ print("Sum of invalid IDs:", sum(invalid_ids))
 ### --- END PART 1 --- ###
 
 ### --- START PART 2 --- ###
-# Reset our variables
-invalid_ids = []
+# (See comments in is_invalid_id function for changes made for part 2)
+# The code for part 2 is the same as part 1, with only the is function changed.
+# Running this file again will yield the correct answer for part 2, which was
+# 22617871034
+# --- END PART 2 --- ###
